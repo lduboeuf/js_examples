@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Add and remove dom</title>
+
+<style>
+#error_message {
+	color: red;
+}
+
+#appender {
+	background-color: #CCCCCC;
+}
+
+#remover {
+	background-color: red;
+}
+
+
+#remover, #appender {
+text-align: center;
+	display: inline-block;
+	width:50px;
+	height: 50px;
+	font-size: 3em;
+}
+
+
+</style>
+<script>
+
+	var msg = document.getElementById("error_message");
+
+	
+	
+	function display_info(){
+		//document.getElementById("video").style.visibility = "visible";
+		var txt = document.getElementById("info").value;
+		document.getElementById("error_message").innerHTML = "kikou " + txt;
+	}
+	
+	
+	function add_info(){
+		
+		var p = document.createElement("p");
+		p.innerHTML = "oulalalalalalala!";
+		document.getElementById("display").appendChild(p);
+		
+	}
+	
+	function remove_info(){
+		var d = document.getElementById("display");
+		if (d!="undefined")
+			d.removeChild(d.lastChild);
+	}
+
+	
+	function setupListeners(){
+		document.getElementById("btnOK").addEventListener('click', display_info, false);
+		document.getElementById("appender").addEventListener('click', add_info, false);
+		document.getElementById("remover").addEventListener('click', remove_info, false);
+		window.addEventListener("keydown", function(e){
+			console.log(e.keyCode);
+			if (e.keyCode==46){ //delete key
+				
+				remove_info();
+			}
+			
+		}, true);
+
+
+	}
+	
+	
+	window.addEventListener("load", function(){
+		
+		setupListeners();
+		
+		
+	}, false);
+	
+	
+	
+</script>
+
+</head>
+<body>
+
+<div>
+
+
+
+	<input type="text" id="info" placeholder="rien du tout" value=""/>
+	<input type="button" id="btnOK" value="ok"/>
+
+	<p id="error_message">
+	</p>
+
+	<div id="appender">
+	+
+	</div>
+	<div id="remover">
+	-
+	</div>
+
+	<div id="display">
+	</div>
+</div>
+
+
+</body>
+</html>

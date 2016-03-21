@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Team Builder</title>
+    <script>
+            // Code goes here
+      'use strict';
+
+      var peoples = [
+        "Jeannot",
+        "Plicouti",
+        "zololo",
+        "marikoutard",
+        "mercoul",
+        "mezipout",
+        "faroumtata",
+        "mektadit",
+        "pikatchou"
+
+      ]
+
+
+
+      var findPeoples = function() {
+        
+        //work with a copy of initial list
+        var peoplesTemp = peoples.slice();
+        
+        var nbPers = document.getElementById("txt-loto-nb").value;
+        //to avoid infinite loop
+        if (nbPers.length === 0) return;
+        
+        var team = [nbPers];
+        for (var i=0; i < nbPers;i++){
+           var n = Math.floor(Math.random() * (peoplesTemp.length - 1));
+           team[i] = peoplesTemp.splice(n, 1);
+           
+        }
+       
+        //clear all:
+        document.getElementById("team-list").innerHTML = '';
+        displayTeam(team, "Hall of fame:");
+        
+        
+      }
+
+
+
+
+      var calculateTeams = function() {
+        //work with a copy of initial list
+        var peoplesTemp = peoples.slice();
+
+
+        var nbPers = document.getElementById("nb-pers").value;
+        //to avoid infinite loop
+        if (nbPers.length === 0) return;
+
+        var nbTeam = Math.floor(peoples.length / nbPers);
+
+        console.log("nbPers:" + nbPers + " - nbTeam:" + nbTeam);
+
+        var teams = [nbTeam];
+
+        for (var i = 0; i < nbTeam; i++) {
+          
+          var team = [nbPers];
+          for (var j = 0; j < nbPers; j++) {
+
+            var n = Math.floor(Math.random() * (peoplesTemp.length - 1));
+            team[j] = peoplesTemp.splice(n, 1);
+
+          }
+
+          teams[i] = team;
+
+        }
+
+        displayTeams(teams);
+
+        //display orphans
+        displayTeam(peoplesTemp, "Team Orphan(s)");
+
+
+      }
+
+      var displayTeams = function(teams) {
+
+
+        //clear all:
+        document.getElementById("team-list").innerHTML = '';
+
+        for (var i = 0; i < teams.length; i++) {
+
+          displayTeam(teams[i], "Team " + i);
+
+        }
+
+
+      }
+
+      var displayTeam = function(team, name) {
+
+        var teamList = document.getElementById("team-list");
+        //title
+        var title = document.createElement("h3");
+        title.innerHTML = name;
+
+        teamList.appendChild(title);
+        var ul = document.createElement("ul");
+
+        for (var j = 0; j < team.length; j++) {
+          var li = document.createElement("li");
+          li.innerHTML = team[j];
+
+          ul.appendChild(li);
+        }
+
+        teamList.appendChild(ul);
+      }
+
+      window.addEventListener("load", function() {
+
+        document.getElementById("btn-ok").addEventListener('click', calculateTeams);
+
+        document.getElementById("btn-loto-ok").addEventListener('click', findPeoples);
+
+
+      });
+
+    </script>
+  </head>
+
+  <body>
+
+    <form id="team-builder">
+      <label for="nb-pers">1 - nb de pers par equipe:</label><input type="text" id="nb-pers" maxlength="2" pattern="[0-9]{1,2}" required/>
+      <input type="button" id="btn-ok" value="ok"/>
+    </form>
+    
+    <form id="loto">
+      <label for="nb-pers">2 - Qui va s'y coller ? (nb de pers):</label><input type="text" id="txt-loto-nb" maxlength="2" pattern="[0-9]{1,2}" required/><input type="button" id="btn-loto-ok" value="ok"/>
+      <div id="people-list">
+      </div>
+    </form>
+    
+    <div id="team-list">
+    </div>
+    
+  </body>
+
+</html>

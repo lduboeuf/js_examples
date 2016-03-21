@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Drag and drop example</title>
+
+<style>
+
+#source img {
+	cursor: move;
+}
+#source, #target {width:350px;height:250px;padding:10px;border:1px solid #aaaaaa;}
+
+#target {background-color: #cccccc;}
+
+</style>
+<script>
+
+	
+	function allowDrop(ev) {
+    	ev.preventDefault();
+	}
+
+	function drag(ev) {
+	    ev.dataTransfer.setData("text", ev.target.id);
+	}
+	
+	function drop(ev) {
+	    ev.preventDefault();
+	    var data = ev.dataTransfer.getData("text");
+	    ev.target.appendChild(document.getElementById(data));
+	}
+
+	
+	function setupListeners(){
+		document.getElementById("img1").addEventListener('dragstart', drag, false);
+		document.getElementById("target").addEventListener('drop', drop, false);
+		document.getElementById("source").addEventListener('drop', drop, false);
+		document.getElementById("target").addEventListener('dragover', allowDrop, false);
+		document.getElementById("source").addEventListener('dragover', allowDrop, false);
+	}
+	
+	
+	window.addEventListener("load", function(){
+		
+		setupListeners();
+		
+		
+	}, false);
+	
+	
+	
+</script>
+
+</head>
+<body>
+
+
+	<h3>Drag from top to bottom block</h3>
+	<div>
+		<div id="source">
+			<img id="img1" src="moue2_tn.png" draggable="true" title="drag me">
+		</div>
+		<div id="target"></div>
+	</div>
+
+
+
+</body>
+</html>
