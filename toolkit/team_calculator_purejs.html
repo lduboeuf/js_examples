@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
   <head>
     <title>Team Builder</title>
     <script>
@@ -23,26 +22,26 @@
 
 
       var findPeoples = function() {
-        
+
         //work with a copy of initial list
         var peoplesTemp = peoples.slice();
-        
+
         var nbPers = document.getElementById("txt-loto-nb").value;
         //to avoid infinite loop
         if (nbPers.length === 0) return;
-        
+
         var team = [nbPers];
         for (var i=0; i < nbPers;i++){
            var n = Math.floor(Math.random() * (peoplesTemp.length - 1));
            team[i] = peoplesTemp.splice(n, 1);
-           
+
         }
-       
+
         //clear all:
         document.getElementById("team-list").innerHTML = '';
         displayTeam(team, "Hall of fame:");
-        
-        
+
+
       }
 
 
@@ -64,7 +63,7 @@
         var teams = [nbTeam];
 
         for (var i = 0; i < nbTeam; i++) {
-          
+
           var team = [nbPers];
           for (var j = 0; j < nbPers; j++) {
 
@@ -80,7 +79,44 @@
         displayTeams(teams);
 
         //display orphans
-        displayTeam(peoplesTemp, "Team Orphan(s)");
+        if (peoplesTemp.length > 0) {
+          displayTeam(peoplesTemp, "Team Orphan(s)");
+          //very dirty way of doing this....
+          var orphansDiv = document.getElementById("team-list").lastChild;
+          var childs = orphansDiv.getElementsByTagName("ul")[0].childNodes;
+          for (var i=0; i < childs.length ; i++){
+
+
+            var span = document.createElement("span");
+            span.id = peoplesTemp[i];
+            span.innerHTML = '&#8593&#8593&#8593';
+            span.style.cursor='pointer'
+            span.addEventListener('click', function(){
+              console.log('kikou:' + this.id);
+              var teamList = document.getElementById("team-list");
+              //get the first team and add the mate into it
+              var firstTeam = teamList.getElementsByTagName("ul")[0];
+              var li = document.createElement("li");
+              li.innerHTML = this.id;
+
+              firstTeam.appendChild(li);
+              //span->li->ul
+              var ul_orphans = this.parentNode.parentNode;
+              //remove li now from orphans
+              ul_orphans.removeChild(this.parentNode);
+
+              //remove "orphans label" if no more orphans
+              if (ul_orphans.childNodes.length == 0){
+                ul_orphans.parentNode.parentNode.removeChild(ul_orphans.parentNode);
+              }
+
+            })
+
+
+            childs[i].appendChild(span);
+          }
+        }
+
 
 
       }
@@ -100,14 +136,17 @@
 
       }
 
-      var displayTeam = function(team, name) {
+      function shuffle(a) {
+        var j, x, i;
+        for (i = a.length; i; i--) {
+            j = Math.floor(Math.random() * i);
+            x = a[i - 1];
+            a[i - 1] = a[j];
+            a[j] = x;
+        }
+      }
 
-        var teamList = document.getElementById("team-list");
-        //title
-        var title = document.createElement("h3");
-        title.innerHTML = name;
-
-        teamList.appendChild(title);
+      var createTeamEl = function(team) {
         var ul = document.createElement("ul");
 
         for (var j = 0; j < team.length; j++) {
@@ -116,8 +155,46 @@
 
           ul.appendChild(li);
         }
+        return ul;
+      }
 
-        teamList.appendChild(ul);
+      var displayTeam = function(team, name) {
+
+
+        var teamList = document.getElementById("team-list");
+        
+        var div = document.createElement("div");
+        div.id = name;
+
+        //title
+        var title = document.createElement("h3");
+        title.innerHTML = name;
+
+        //make it possible to shuffle team
+        var span = document.createElement("span");
+        span.innerHTML = '&#8634';
+        span.style.cursor='pointer';
+        span.addEventListener('click', function(){
+          shuffle(team);
+          div.getElementsByTagName("ul")[0].remove();
+          div.appendChild(createTeamEl(team));
+        });
+        title.appendChild(span);
+
+        //&#8634
+
+        div.appendChild(title);
+        // var ul = document.createElement("ul");
+
+        // for (var j = 0; j < team.length; j++) {
+        //   var li = document.createElement("li");
+        //   li.innerHTML = team[j];
+
+        //   ul.appendChild(li);
+        // }
+        div.appendChild(createTeamEl(team));
+
+        teamList.appendChild(div);
       }
 
       window.addEventListener("load", function() {
@@ -130,24 +207,30 @@
       });
 
     </script>
+    <style>
+      li:first-child {
+        color: green;
+      }
+    </style>
   </head>
 
   <body>
-
+  <h1>Build your Team randomly</h1>
     <form id="team-builder">
       <label for="nb-pers">1 - nb de pers par equipe:</label><input type="text" id="nb-pers" maxlength="2" pattern="[0-9]{1,2}" required/>
       <input type="button" id="btn-ok" value="ok"/>
     </form>
-    
+
     <form id="loto">
       <label for="nb-pers">2 - Qui va s'y coller ? (nb de pers):</label><input type="text" id="txt-loto-nb" maxlength="2" pattern="[0-9]{1,2}" required/><input type="button" id="btn-loto-ok" value="ok"/>
       <div id="people-list">
       </div>
     </form>
-    
+
     <div id="team-list">
     </div>
-    
+
+
   </body>
 
 </html>
