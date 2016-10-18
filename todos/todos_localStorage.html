@@ -1,0 +1,154 @@
+ <!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <title>Testouilles</title>
+    <!-- On peut avoir d'autres méta-données ici -->
+    <style>
+
+
+      #editTodoForm.edit {
+        display:none;
+
+      }
+    </style>
+  </head>
+  <body>
+
+  <div id="monDiv">
+    <input type="text" id="addTodoTxt" placeholder="nom de la tâche" />
+    <input type="button" id="addTodoBtn" value="ok"/>
+  </div>
+  <ul id="todoList">
+  </ul>
+
+  <div id="editTodoForm" class="edit">
+    <input type="text" id="editTodoTxt" placeholder="nom de la tâche" />
+    <input type="button" id="editTodoBtn" value="ok"/>
+  </div>
+  <script>
+
+  var addTodoBtn = document.getElementById('addTodoBtn');
+  var addTodoTxt = document.getElementById('addTodoTxt');
+  var editTodoBtn = document.getElementById('editTodoBtn');
+  var editTodoTxt = document.getElementById('editTodoTxt');
+
+  var tempTodo;
+
+  var TodoStore = {
+
+    todos: [],
+
+    getAll: function(){
+      var todosStr = localStorage.getItem('todos');
+      if (todosStr){
+          this.todos = JSON.parse(todosStr);
+      }
+      return this.todos;
+    },
+
+    store: function(){
+      var todosStr = JSON.stringify(this.todos);
+      localStorage.setItem('todos',todosStr);
+    },
+
+    add: function(todo){
+      this.todos.push(todo);
+      this.store();
+    }
+
+  }
+
+  var todos = TodoStore.getAll();
+
+  // var todos =[
+  //   {
+  //     name:'todo1',
+  //     priority:1
+  //   },
+  //   {
+  //     name:'todo2',
+  //     priority:2
+  //   },
+  //   {
+  //     name:'todo3',
+  //     priority:3
+  //   },
+
+
+  // ];
+
+
+
+  var addTodo = function(todo){
+
+    var todoUl = document.getElementById('todoList');
+
+    var editBtn = document.createElement('button');
+    editBtn.innerHTML = 'edit';
+    editBtn.addEventListener('click', editTodo);
+
+
+    var delBtn = document.createElement('button');
+    delBtn.innerHTML = 'delete';
+    delBtn.addEventListener('click', removeTodo);
+
+
+    var todoLi = document.createElement('li');
+    var todoSpan = document.createElement('span');
+    todoSpan.innerHTML = todo.name;
+
+
+    todoLi.appendChild(todoSpan);
+    todoLi.appendChild(editBtn);
+    todoLi.appendChild(delBtn);
+
+    todoUl.appendChild(todoLi);
+
+
+  }
+
+  var removeTodo = function(evt){
+    var li = this.parentNode;
+    li.remove();
+  }
+
+  var editTodo = function (evt){
+    document.getElementById('editTodoForm').classList.toggle('edit');
+
+
+    var li = this.parentNode;
+    var span = li.firstChild;
+    tempTodo = span;
+
+    editTodoTxt.value = span.innerText;
+  }
+
+  var editSubmitTodo = function(){
+    tempTodo.innerHTML =  editTodoTxt.value;
+    document.getElementById('editTodoForm').classList.toggle('edit');
+  }
+
+
+  addTodoBtn.addEventListener('click', function(){
+    var todo = {
+      name: addTodoTxt.value
+    };
+    TodoStore.add(todo);
+    addTodo(todo);
+  } );
+
+  editTodoBtn.addEventListener('click', editSubmitTodo);
+
+
+
+  for (var i=0; i <todos.length; i++){
+    addTodo(todos[i]);
+  }
+  
+
+
+
+  </script>
+  </body>
+</html>
