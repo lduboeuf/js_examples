@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>carrefour</title>
+    <style media="screen">
+      .feux{
+          margin:10px;
+          width:80px;
+          height: 150px;
+          background-color: black;
+      }
+      #feux-nord, #feux-sud {
+        margin-left: 50%;
+      }
+      #feux-est, #feux-ouest {
+        display:inline-block;
+      }
+      #feux-ouest{
+        position:absolute;
+        right: 0px;
+      }
+
+      .cercle{
+        margin:5px auto;
+        border-radius: 50%;
+        width:35px;
+        height:35px;
+        border:2px solid #fff;
+      }
+
+      .feux.rouge > .cercle.haut{
+        background-color: red;
+      }
+
+      .feux.orange > .cercle.milieu{
+        background-color: orange;
+      }
+      .feux.vert > .cercle.bas{
+        background-color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="start-stop">Start</button>
+
+    <div id="feux-nord" class="feux">
+      <div class="cercle haut"></div>
+      <div class="cercle milieu"></div>
+      <div class="cercle bas"></div>
+    </div>
+    <div id="feux-ouest" class="feux">
+      <div class="cercle haut"></div>
+      <div class="cercle milieu"></div>
+      <div class="cercle bas"></div>
+    </div>
+    <div id="feux-est" class="feux">
+      <div class="cercle haut"></div>
+      <div class="cercle milieu"></div>
+      <div class="cercle bas"></div>
+    </div>
+    <div id="feux-sud" class="feux">
+      <div class="cercle haut"></div>
+      <div class="cercle milieu"></div>
+      <div class="cercle bas"></div>
+    </div>
+    <script type="text/javascript" src="index.js">
+    </script>
+  </body>
+</html>
