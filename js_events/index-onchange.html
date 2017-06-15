@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      .res{
+        border:1px dashed red;
+        height:200px;
+        width:400px;
+      }
+
+      #result {
+        position:fixed;
+      }
+
+    </style>
+  </head>
+  <body>
+    <input type="text" name="" id="champ" value="" placeholder="saisir ici">
+    <button type="button" name="ok">ok</button>
+    <div class="res">
+      <p id="result"></p>
+    </div>
+
+    <script type="text/javascript">
+      var result = document.getElementById('result');
+              result.style.position = "absolute";
+      var divres = document.querySelector('.res');
+
+      document.getElementById('champ').onkeyup = function(){
+        result.innerHTML = this.value;
+      }
+
+      var container = divres.getBoundingClientRect();
+
+
+      function toutpeter(){
+        var baladeur = result.getBoundingClientRect();
+        result.style.left = baladeur.left + 10 +'px';
+        result.style.top = baladeur.top + 10 +'px';
+      }
+
+      document.querySelector('button').onclick = function(){
+        setInterval(toutpeter, 1000);
+      }
+    </script>
+  </body>
+</html>

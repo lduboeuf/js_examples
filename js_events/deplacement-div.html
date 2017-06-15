@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Déplacement div avec clavier</title>
+    <style media="screen">
+      #box {
+        position:fixed;
+        width:50px;
+        height: 50px;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        background-color: green;
+      }
+
+      #box.collision {
+        background-color: red;
+        background-image: url(bomb.gif);
+      }
+
+
+    </style>
+  </head>
+  <body>
+    <h1>utiliser les flêches de directions</h1>
+    <main>
+      <label for="pas">pas</label>
+        <select class="" name="pas">
+        <option value="20">20</option>
+        <option value="50" selected="selected">50</option>
+        <option value="100">100</option>
+      </select>
+      <div id="box">
+
+      </div>
+
+    </main>
+    <script type="text/javascript">
+      var $box = document.getElementById('box');
+      var $pas = document.querySelector('select[name="pas"]');
+
+
+      document.onkeypress = function(e){
+
+        var pas = parseInt($pas.value);
+
+        var x = parseInt($box.style.left) || 0;
+        var y = parseInt($box.style.top) || 0;
+
+
+
+        if (e.keyCode==37){ //gauche
+          x = x - pas;
+          $box.style.left = x + 'px';
+        }else if (e.keyCode==39){ //droite
+          x = x + pas;
+          $box.style.left = x + 'px';
+        }else if(e.keyCode==38){
+          y = y - pas;
+          $box.style.top = y + 'px';
+        }else if(e.keyCode==40){
+          y = y + pas;
+          $box.style.top = y + 'px';
+        }
+
+        //collision ?
+        var position = $box.getBoundingClientRect();
+        if ((position.left < 50) || (position.left > window.innerWidth -60 ) || (position.top < 50) || (position.top > window.innerHeight -60) ){
+          $box.classList.add('collision');
+        }else{
+          $box.classList.remove('collision');
+        }
+      }
+    </script>
+  </body>
+</html>
