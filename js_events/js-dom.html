@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>creation de balise p par programmation ( suppr, déplacement par drag&drop, par boutons up & down)</title>
+    <style media="screen">
+
+      #conteneur{
+
+        margin:10px;
+      }
+
+      p {
+        border:1px dashed green;
+        padding:5px;
+      }
+
+      p:hover{
+        cursor: move;
+      }
+
+      p.dragged-over {
+        border: 2px dashed #000;
+      }
+
+      .select{
+        border:2px dashed red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>creation de balise p par programmation ( suppr, déplacement par drag&drop, par boutons up & down)</h1>
+    <button id="ok" type="button" name="button">creer contenu</button>
+    <button id="suppr" type="button" name="button">supprimer contenu</button>
+    <button id="toggle-color" type="button" name="toggle-color">change color</button>
+
+    <div id="conteneur">
+
+    </div>
+
+    <script type="text/javascript">
+      //on recherche par programmation  les elements HTML (ici utilisation de la méthode getElementById
+      var div = document.getElementById('conteneur');
+      //on peut également utiliser les selecteurs css avec la méthode 'querySelector'
+      var button = document.querySelector('#ok');
+      var toggleBtn = document.getElementById('toggle-color');
+      var btnSuppr = document.getElementById('suppr');
+
+
+      var compteur = 0;
+
+
+      div.ondragover = function(ev){
+        ev.preventDefault();
+      }
+
+      /**
+        fonction qui créer une balise p avec le contenu passé en entrée de la fonction
+      **/
+      function createP(content){
+        var p = document.createElement('p');
+        p.innerHTML = compteur + ' ' + content  ;
+        p.draggable = true;
+        p.id = 'p' + compteur;
+
+
+
+        /**drag&drops**/
+
+
+        p.ondrop = function(ev){
+          ev.preventDefault();
+          var id = ev.dataTransfer.getData("id");
+          var next = this.nextElementSibling;
+          if (next){ //hasNext Element ?
+            ev.target.parentNode.insertBefore(document.getElementById(id), this);
+          }else{
+            div.appendChild(document.getElementById(id)); //avant de le rajouter après
+          }
+          this.classList.remove('dragged-over');
+        }
+
+        p.ondragstart = function(ev){
+          ev.dataTransfer.setData('id', ev.target.id);
+        }
+
+        //un peu de style
+        p.ondragover = function(){
+          this.classList.add('dragged-over');
+        }
+
+        p.ondragleave = function(){
+          this.classList.remove('dragged-over');
+        }
+
+        /**end drag&drops**/
+
+
+        //bouton suppression
+        var btn = document.createElement('button');
+        btn.innerHTML = "suppr";
+        btn.onclick = function(){
+          this.parentNode.remove();
+        }
+        p.appendChild(btn);
+
+        //bouton edit
+        var btnEdit = document.createElement('button');
+        btnEdit.innerHTML = "edit";
+        btnEdit.onclick = function(){
+          //on va chercher le texte ( premier enfant de la balise p)
+          var txtNode = this.parentNode.firstChild;
+          var input = document.createElement("input");
+          input.type = "text";
+          input.id = "editor";
+          input.value = txtNode.textContent;
+          input.onblur = function(){
+            var txt = document.createTextNode(this.value);
+            this.parentNode.replaceChild(txt, this);
+          }
+          /*
+          window.addEventListener('click', function(){
+            var input  = document.getElementById("editor");
+            var txt = document.createTextNode(input.value);
+            input.parentNode.replaceChild(txt, input);
+          });
+          window.addEventListener('click',function(evt){
+            evt.stopPropagation();
+          });
+          */
+          this.parentNode.replaceChild(input, txtNode);
+
+        }
+        p.appendChild(btnEdit);
+
+
+        //bouton up
+        var btnUp = document.createElement('button');
+        btnUp.innerHTML = "up";
+        btnUp.onclick = function(){
+          var p = this.parentNode;
+          var previous = p.previousElementSibling;
+          if (previous==null){ //on est tout en haut de la liste, on doit le mettre tout en bas
+            div.removeChild(p); //on est obligé de supprimer le noeud de la liste d'abord
+            div.appendChild(p); //avant de le rajouter après
+          }else{
+            div.insertBefore(p, previous);
+          }
+
+        }
+        p.appendChild(btnUp);
+
+        //bouton down
+        var btnDown = document.createElement('button');
+        btnDown.innerHTML = "down";
+        btnDown.onclick = function(){
+          var p = this.parentNode;
+          var next = p.nextElementSibling;
+          if (next==null){ //on est tout en bas de la liste on doit le mettre tout en haut
+            div.insertBefore(p, div.childNodes[0]);
+          }else{
+            div.insertBefore(p, next.nextElementSibling);
+          }
+
+        }
+        p.appendChild(btnDown);
+
+        div.appendChild(p);
+        compteur++;
+      }
+
+
+      //sur l'evènement 'onclick' on créer un element 'p'
+      button.onclick = function(){
+        createP('coucou depuis bouton');
+      }
+
+      //suppression du dernier element créé
+      btnSuppr.onclick = function(){
+        div.removeChild(div.lastChild);
+      }
+
+      //exemple pour changer le style des elements
+      toggleBtn.onclick = function(){
+        //querySelectorAll renvoie une liste sous forme de tableau de tous les elements qui corresponde au selecteur css 'p'
+        var ps = document.querySelectorAll('p');
+        for (var i = 0; i < ps.length; i++) {
+          ps[i].classList.toggle('select');
+        }
+
+      }
+
+
+    </script>
+  </body>
+</html>

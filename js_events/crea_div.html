@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>creation de balise p par programmation</title>
+    <style media="screen">
+      p {
+        background-color: green;
+      }
+
+      .select{
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="ok" type="button" name="button">creer contenu</button>
+    <button id="suppr" type="button" name="button">supprimer contenu</button>
+    <button id="toggle-color" type="button" name="toggle-color">change color</button>
+
+    <div id="conteneur">
+
+    </div>
+
+    <script type="text/javascript">
+      //on recherche par programmation  les elements HTML (ici utilisation de la méthode getElementById
+      var div = document.getElementById('conteneur');
+      //on peut également utiliser les selecteurs css avec la méthode 'querySelector'
+      var button = document.querySelector('#ok');
+      var toggleBtn = document.getElementById('toggle-color');
+      var btnSuppr = document.getElementById('suppr');
+
+      /**
+        fonction qui créer une balise p avec le contenu passé en entrée de la fonction
+      **/
+      function createP(content){
+        var p = document.createElement('p');
+        p.innerHTML = content;
+        div.appendChild(p);
+      }
+
+      //sur l'evènement 'onclick' on créer un element 'p'
+      button.onclick = function(){
+        createP('coucou depuis bouton');
+      }
+
+      //suppression du dernier element créé
+      btnSuppr.onclick = function(){
+        div.removeChild(div.lastChild);
+      }
+
+      //exemple pour changer le style des elements
+      toggleBtn.onclick = function(){
+        //querySelectorAll renvoie une liste sous forme de tableau de tous les elements qui corresponde au selecteur css 'p'
+        var ps = document.querySelectorAll('p');
+        for (var i = 0; i < ps.length; i++) {
+          ps[i].classList.toggle('select');
+        }
+
+      }
+
+    </script>
+  </body>
+</html>
