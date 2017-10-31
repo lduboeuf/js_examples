@@ -37,13 +37,17 @@
             list-style-type: none;
             margin: 1em;
         }
+        a {
+            color:purple;
+            text-decoration: none;
+        }
+        
 
         li a {
             display:block;
             padding:1em;
-            text-decoration: none;
+            
             text-align: center;
-            color:purple;
             font-size:1.2em;
         }
 
@@ -60,6 +64,9 @@
             padding: 0.5em;
             margin-top: 0.5em;
             border-radius: 4px;
+        }
+        .sentiment a {
+            color:steelblue;
         }
 
         @media screen and (max-width: 640px) {
@@ -102,7 +109,15 @@
             sentiments[hash].forEach(function(element) {
                 var span = document.createElement('span');
                 span.className = 'sentiment';
-                span.innerHTML = element;
+                
+                var cleanSentiment = element.replace(/\(|\)/g,'');
+                var sentiment = cleanSentiment.toLowerCase();
+
+                var ahref = document.createElement('a'); 
+                ahref.setAttribute('href', 'https://fr.wiktionary.org/wiki/' + sentiment);
+                ahref.innerHTML = element;
+                span.appendChild(ahref);
+                
                 container.appendChild(span);
             }, this);
 
