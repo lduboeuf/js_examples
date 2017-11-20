@@ -27,6 +27,7 @@
         nav {
             width:50%;
             margin: auto;
+            text-align: center;
         }
         ul{
             padding:0;
@@ -41,6 +42,10 @@
             color:purple;
             text-decoration: none;
         }
+
+        a:hover, a:active{
+            background-color: rgb(226, 214, 214);
+        }
         
 
         li a {
@@ -49,6 +54,12 @@
             
             text-align: center;
             font-size:1.2em;
+        }
+
+        
+        footer {
+            position:absolute;
+            width:100%;
         }
 
         #sentiments {
@@ -69,6 +80,11 @@
             color:steelblue;
         }
 
+        footer {
+            font-style: italic;
+            text-align: center;
+        }
+
         @media screen and (max-width: 640px) {
             nav {
                 width:90%;
@@ -80,7 +96,9 @@
     </style>
 </head>
 <body>
+
     <nav>
+        <h1>Emotions:</h1>
         <ul>
             <li><a href="#joie"> Joie</a></li>
             <li><a href="#tristesse">Tristesse</a></li>
@@ -89,12 +107,13 @@
         </ul>
     </nav>
     <section class="container">
+        Sentiments liés à la:
         <h2 id="title"></h2>
         <div id="sentiments">
 
         </div>
     </section>
-   
+
     <script>
 
         var container = document.getElementById('sentiments');
@@ -127,6 +146,6 @@
         window.onhashchange = toggleVisibility;
     
     </script>
-    <footer>source: https://helenesoula.fr/ecrire-emotions-sentiments-mots-adjectifs-liste/</footer>
+    <footer><p>source: https://helenesoula.fr/ecrire-emotions-sentiments-mots-adjectifs-liste/</p></footer>
 </body>
 </html>
